@@ -4,6 +4,9 @@
 
 Um gerador de nomes militares personalizados para jogadores de FPS, RPG tático, simuladores militares e clãs gamer.
 
+Criado por Pedro Gabriel, com a ajuda do Claude Code IA.
+#believeinyourself #acrediteemsimesmo
+
 ---
 
 ## 📸 Preview
