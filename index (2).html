@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WarName Generator</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+</head>
+<body class="dark">
+
+  <!-- Custom cursor -->
+  <div id="cursor-crosshair">
+    <div class="ch-ring"></div>
+    <div class="ch-line ch-top"></div>
+    <div class="ch-line ch-bottom"></div>
+    <div class="ch-line ch-left"></div>
+    <div class="ch-line ch-right"></div>
+    <div class="ch-dot"></div>
+  </div>
+
+  <!-- Scanlines overlay -->
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- Noise grain overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="container">
+
+    <!-- ── HEADER ── -->
+    <header class="site-header">
+      <div class="header-tag">▸ SISTEMA OPERACIONAL ATIVO ◂</div>
+      <h1 class="logo" id="logo-text">WARNAME GENERATOR</h1>
+      <p class="tagline">GENERATE YOUR COMBAT CALLSIGN // CLASSIFIED</p>
+      <div class="header-controls">
+        <button id="btn-lang" class="ctrl-btn" title="Alternar idioma">PT | EN</button>
+        <button id="btn-theme" class="ctrl-btn" title="Alternar tema">◑</button>
+      </div>
+    </header>
+
+    <!-- ── MAIN ── -->
+    <main class="main-grid">
+
+      <!-- LEFT: Filters -->
+      <aside class="panel filters-panel">
+        <div class="panel-corner tl"></div>
+        <div class="panel-corner tr"></div>
+        <div class="panel-corner bl"></div>
+        <div class="panel-corner br"></div>
+
+        <!-- Branch -->
+        <div class="filter-group">
+          <label class="filter-label" data-i18n="branch">▸ DIVISÃO</label>
+          <div class="btn-grid cols-2">
+            <button class="filter-btn active" data-filter="branch" data-value="army" data-i18n="army">Exército</button>
+            <button class="filter-btn" data-filter="branch" data-value="navy" data-i18n="navy">Marinha</button>
+            <button class="filter-btn" data-filter="branch" data-value="airforce" data-i18n="airforce">Força Aérea</button>
+            <button class="filter-btn" data-filter="branch" data-value="special" data-i18n="special">Forças Especiais</button>
+          </div>
+        </div>
+
+        <!-- Style -->
+        <div class="filter-group">
+          <label class="filter-label" data-i18n="style">▸ ESTILO</label>
+          <div class="btn-grid cols-1">
+            <button class="filter-btn active" data-filter="style" data-value="modern" data-i18n="modern">Moderno</button>
+            <button class="filter-btn" data-filter="style" data-value="futuristic" data-i18n="futuristic">Futurista</button>
+            <button class="filter-btn" data-filter="style" data-value="classic" data-i18n="classic">Clássico</button>
+          </div>
+        </div>
+
+        <!-- Nationality -->
+        <div class="filter-group">
+          <label class="filter-label" data-i18n="nationality">▸ NAÇÃO</label>
+          <div class="btn-grid cols-3">
+            <button class="filter-btn" data-filter="nat" data-value="BR">BR</button>
+            <button class="filter-btn active" data-filter="nat" data-value="US">US</button>
+            <button class="filter-btn" data-filter="nat" data-value="RU">RU</button>
+            <button class="filter-btn" data-filter="nat" data-value="DE">DE</button>
+            <button class="filter-btn" data-filter="nat" data-value="UK">UK</button>
+            <button class="filter-btn" data-filter="nat" data-value="CN">CN</button>
+          </div>
+        </div>
+
+        <!-- Rank override -->
+        <div class="filter-group">
+          <label class="filter-label" data-i18n="rank">▸ PATENTE</label>
+          <div class="btn-grid cols-2" style="margin-bottom: 8px;">
+            <button class="filter-btn active" id="rank-auto" data-i18n="rankAuto">Auto</button>
+            <button class="filter-btn" id="rank-custom" data-i18n="rankCustom">Manual</button>
+          </div>
+          <input type="text" id="custom-rank-input" class="text-input hidden"
+            placeholder="Ex: Ghost, Major, Sgt." maxlength="20" />
+        </div>
+
+        <!-- Count slider -->
+        <div class="filter-group">
+          <label class="filter-label">▸ <span data-i18n="count">QUANTIDADE</span>: <span id="count-display">1</span></label>
+          <input type="range" id="count-slider" min="1" max="8" value="1" class="range-slider" />
+        </div>
+      </aside>
+
+      <!-- RIGHT: Output + History -->
+      <section class="right-col">
+
+        <!-- Result display -->
+        <div class="panel result-panel" id="result-panel">
+          <div class="panel-corner tl"></div>
+          <div class="panel-corner tr"></div>
+          <div class="panel-corner bl"></div>
+          <div class="panel-corner br"></div>
+          <div class="result-placeholder" id="result-placeholder">
+            <span class="blink">█</span> AGUARDANDO ORDEM...
+          </div>
+          <div id="result-list" class="result-list"></div>
+        </div>
+
+        <!-- Generate CTA -->
+        <button id="btn-generate" class="generate-btn">
+          <span class="gen-icon">⚡</span>
+          <span id="gen-label" data-i18n="generate">GERAR NOME</span>
+          <span class="gen-scan"></span>
+        </button>
+
+        <!-- History -->
+        <div class="panel history-panel">
+          <div class="panel-corner tl"></div>
+          <div class="panel-corner tr"></div>
+          <div class="panel-corner bl"></div>
+          <div class="panel-corner br"></div>
+          <div class="history-header">
+            <span class="filter-label">▸ <span data-i18n="history">HISTÓRICO DE COMBATE</span> (<span id="history-count">0</span>/50)</span>
+            <button id="btn-clear" class="ctrl-btn danger hidden" data-i18n="clearHistory">Limpar</button>
+          </div>
+          <div id="history-list" class="history-list">
+            <span class="history-empty" data-i18n="noHistory">Nenhum nome gerado ainda.</span>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      WARNAME GENERATOR v1.0 &nbsp;•&nbsp; CLASSIFIED &nbsp;•&nbsp; © <span id="year"></span>
+    </footer>
+
+  </div>
+
+  <script src="js/database.js"></script>
+  <script src="js/generator.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
